@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Perfil do Cliente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 30px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 20px 0 5px;
+        }
+
+        input[type="text"],
+        input[type="datetime-local"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #007BFF;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .imagem {
+            width: 100%;
+            max-width: 100%;
+            display: block;
+            margin: 0 auto 20px auto;
+        }
+
+        .titulo-prioridades {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 40px;
+            font-family: Arial, sans-serif;
+            line-height: 1.2;
+        }
+
+        .titulo-prioridades .vermelho {
+            color: #c8102e;
+            font-weight: bold;
+            font-size: 32px;
+        }
+
+        .titulo-prioridades .cinza {
+            color: #333;
+            font-size: 32px;
+        }
+
+        .titulo-prioridades .bold {
+            font-weight: bold;
+            font-size: 42px;
+        }
+
+        .logo-final {
+            max-width: 220px;
+            margin: 40px auto 20px auto;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="titulo-prioridades">
+        <span class="vermelho">ENUMERE</span> <span class="cinza">SUAS</span><br>
+        <span class="cinza bold">PRIORIDADES</span>
+    </div>
+
+    <div class="container">
+        <h1>Perfil do Cliente Adulto</h1>
+        <form action="/submit" method="POST">
+
+            <label>Tipo de visita:</label>
+
+            <input type="radio" name="tipo_visita" value="espontaneo"> Espontânea<br>
+            <input type="radio" name="tipo_visita" value="estimulado"> Estimulado<br>
+
+            <label>Nome do visitante:</label>
+            <input type="text" name="nome_visitante" required>
+
+            <label>Código de cadastro no sistema:</label>
+            <input type="text" name="codigo_cadastro" required>
+
+            <label for="consultora">Consultora responsável pelo atendimento:</label>
+            <select name="consultora" required select>
+                <option value="">Selecione uma consultora</option>
+                <option value="Meire">Meire Queiroz</option>
+                <option value="Helen">Helen </option>
+                <option value="Stephanie">Stephanie</option>
+            </select>
+
+
+
+            <label for="unidade">Unidade visitada:</label>
+            <select name="unidade" required>
+                <option value="">Selecione uma unidade</option>
+                <option value="Morumbi">MorumbiShopping</option>
+                <option value="Cia111">Cia 111</option>
+            </select>
+
+            <!-- campo oculto para capturar data/hora do dispositivo -->
+            <input type="hidden" id="data_horario_visita" name="data_horario_visita">
+
+            <!-- opcional: exibir para o visitante, mas como somente leitura -->
+            <label>Data e horário (capturado automaticamente):</label>
+            <input type="text" id="data_horario_visita_display" readonly>
+
+
+
+            <img src="/assets/2.png" alt="Painel Prioridades" class="imagem">
+
+            <label>Pratica atividade física?</label>
+            <input type="radio" name="atividade_fisica" value="sim"> Sim
+            <input type="radio" name="atividade_fisica" value="nao"> Não
+            <input type="text" name="qual_atividade" placeholder="Se sim, qual?">
+
+            <label>Como você avalia sua forma física atual?</label>
+            <input type="radio" name="forma_fisica" value="boa"> Boa
+            <input type="radio" name="forma_fisica" value="regular"> Regular
+            <input type="radio" name="forma_fisica" value="ruim"> Ruim
+
+            <label>Ativo em outra academia?</label>
+            <input type="radio" name="outra_academia" value="sim"> Sim
+            <input type="radio" name="outra_academia" value="nao"> Não
+            <input type="text" name="qual_academia" placeholder="Se sim, qual?">
+
+            <label>Horários de interesse:</label>
+            <input type="checkbox" name="horario[]" value="manha"> Manhã
+            <input type="checkbox" name="horario[]" value="tarde"> Tarde
+            <input type="checkbox" name="horario[]" value="noite"> Noite
+
+            <label>Modalidade de maior interesse:</label>
+            <input type="text" name="modalidade_interesse">
+
+            <label>O que é importante para você em uma academia?</label>
+            <input type="checkbox" name="importancia[]" value="atendimento"> Atendimento<br>
+            <input type="checkbox" name="importancia[]" value="estrutura"> Estrutura<br>
+            <input type="checkbox" name="importancia[]" value="variedade"> Variedade das aulas<br>
+            <input type="checkbox" name="importancia[]" value="proximidade"> Proximidade<br>
+
+            <label>O que te trouxe até aqui?</label>
+            <input type="checkbox" name="motivacao[]" value="novos_amigos"> Novos amigos<br>
+            <input type="checkbox" name="motivacao[]" value="nao_conseguiu_resultado"> Não consegui resultados<br>
+            <input type="checkbox" name="motivacao[]" value="insatisfacao_outra"> Insatisfação na outra<br>
+            <input type="checkbox" name="motivacao[]" value="valores"> Valores<br>
+            <input type="checkbox" name="motivacao[]" value="redes_sociais"> Redes Sociais<br>
+            <input type="checkbox" name="motivacao[]" value="distancia"> Distância<br>
+            <input type="checkbox" name="motivacao[]" value="outros"> Outros:<br>
+            <input type="text" name="motivacao_outros" placeholder="Especifique">
+
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+
+    <img src="/assets/3.png" alt="Companhia Athletica" class="imagem logo-final">
+
+    <script>
+        // formata para 'yyyy-MM-ddThh:mm'
+        function toLocalDatetimeInputString(date) {
+          const pad = n => n.toString().padStart(2,'0');
+          return date.getFullYear() + '-' +
+            pad(date.getMonth()+1) + '-' +
+            pad(date.getDate()) + 'T' +
+            pad(date.getHours()) + ':' +
+            pad(date.getMinutes());
+        }
+      
+        document.addEventListener('DOMContentLoaded', () => {
+          const now = new Date();
+          const hidden = document.getElementById('data_horario_visita');
+          const disp   = document.getElementById('data_horario_visita_display');
+          const localStr = toLocalDatetimeInputString(now);
+          hidden.value = localStr;
+          disp.value   = now.toLocaleString('pt-BR');
+        });
+      </script>
+      
+</body>
+
+</html>

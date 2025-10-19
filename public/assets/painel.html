@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Atendimento</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .alerta {
+      background-color: #fff;
+      border-left: 6px solid #28a745;
+      padding: 15px;
+      margin: 20px 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .alerta strong {
+      color: #28a745;
+    }
+    .lista-historico {
+      margin-top: 40px;
+    }
+    .lista-historico h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background: #fff;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-left: 4px solid #007BFF;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>Painel de Atendimento - Novos Formulários</h1>
+  <div id="alertas"></div>
+  <div class="lista-historico">
+    <h2>Últimos formulários recebidos:</h2>
+    <ul id="historico"></ul>
+  </div>
+
+  <audio id="audio-alerta" src="/assets/alert.mp3" preload="auto"></audio>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    const alertas = document.getElementById('alertas');
+    const historico = document.getElementById('historico');
+    const audio = document.getElementById('audio-alerta');
+
+    socket.on('novo_formulario', (dados) => {
+      const alerta = document.createElement('div');
+      alerta.className = 'alerta';
+      alerta.innerHTML = `
+        <strong>Novo visitante:</strong><br>
+        Nome: ${dados.nome_visitante || 'N/A'}<br>
+        Consultora: ${dados.consultora || 'N/A'}<br>
+        Unidade: ${dados.unidade || 'N/A'}<br>
+        Horário: ${new Date(dados.data_horario_visita).toLocaleString('pt-BR')}
+      `;
+      alertas.prepend(alerta);
+
+      const item = document.createElement('li');
+      item.textContent = `${dados.nome_visitante} - ${dados.consultora} - ${dados.unidade} - ${new Date(dados.data_horario_visita).toLocaleTimeString('pt-BR')}`;
+      historico.prepend(item);
+
+      if (historico.children.length > 5) historico.removeChild(historico.lastChild);
+      audio.play();
+    });
+  </script>
+</body>
+</html>

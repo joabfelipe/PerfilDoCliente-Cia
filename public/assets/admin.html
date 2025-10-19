@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel Administrativo</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+    header { background-color: #007BFF; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { margin: 0; font-size: 20px; }
+    .logout { color: white; text-decoration: underline; cursor: pointer; }
+    nav { background: #eee; padding: 15px 30px; display: flex; gap: 15px; }
+    nav a { text-decoration: none; padding: 8px 12px; background: #007BFF; color: white; border-radius: 4px; font-weight: bold; }
+    .container { padding: 30px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #007BFF; color: white; }
+    .actions form { display: inline; }
+    button { padding: 6px 10px; margin: 0 2px; border: none; border-radius: 4px; cursor: pointer; }
+    .btn-danger { background: #dc3545; color: white; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Bem-vindo, {{USUARIO}}</h1>
+    <a class="logout" href="/auth/logout">Sair</a>
+  </header>
+  <nav>
+    <a href="/formulario">Formulário</a>
+    <a href="/historico">Histórico</a>
+    <a href="/painel">Painel Consultora</a>
+    <a href="/index">Tela Inicial</a>
+  </nav>
+  <div class="container">
+    <h2>Usuários Cadastrados</h2>
+    <table>
+      <thead>
+        <tr><th>Email</th><th>Perfil</th><th>Ações</th></tr>
+      </thead>
+      <tbody>
+        {{USUARIOS}}
+      </tbody>
+    </table>
+
+    <h2>Novo Usuário</h2>
+    <form method="POST" action="/admin">
+      <input type="email" name="email" placeholder="Email" required><br>
+      <input type="password" name="senha" placeholder="Senha" required><br>
+      <select name="perfil">
+        <option value="gestor">Gestor</option>
+        <option value="vendedora">Vendedora</option>
+        <option value="recepcao">Recepção</option>
+        <option value="suporte">Suporte</option>
+      </select><br>
+      <button type="submit">Cadastrar</button>
+    </form>
+  </div>
+</body>
+</html>
