@@ -5,9 +5,20 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const { isMongoose, isSequelize } = require('./config/dbAdapter');
 
-// Inicializa conexão com DB
-require('./config/db');
+// Inicializa conexão com DB conforme adaptador
+if (isMongoose) {
+  require('./config/db');
+} else if (isSequelize) {
+  const sequelize = require('./config/dbOracle');
+  sequelize.authenticate()
+    .then(() => console.log('Conectado ao Oracle via Sequelize'))
+    .catch((err) => {
+      console.error('Erro ao conectar ao Oracle:', err);
+      process.exit(1);
+    });
+}
 
 // Importa rotas
 const authRoutes = require('./routes/authRoutes');
