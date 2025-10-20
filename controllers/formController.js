@@ -1,4 +1,4 @@
-const Formulario = require('../models/formModel');
+const { forms } = require('../db');
 
 module.exports = {
   renderPage: (req, res) => {
@@ -42,14 +42,10 @@ module.exports = {
         data_horario_visita: new Date(req.body.data_horario_visita),
       };
 
-      const novo = new Formulario(dadosForm);
-      await novo.save();
+      const novo = await forms.create(dadosForm);
 
       if (req.io) {
-        req.io.emit('novo_formulario', {
-          ...dadosForm,
-          data_horario_visita: novo.data_horario_visita,
-        });
+        req.io.emit('novo_formulario', novo);
       }
 
       res.send('<h2>Formulário enviado com sucesso! Obrigado pela visita.</h2>');

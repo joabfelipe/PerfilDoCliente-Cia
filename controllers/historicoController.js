@@ -1,8 +1,8 @@
-const Formulario = require('../models/formModel');
+const { forms } = require('../db');
 
 module.exports = {
   list: async (req, res) => {
-    const registros = await Formulario.find().sort({ data_horario_visita: -1 });
+    const registros = await forms.findSortedByDateDesc();
     let html = `
     <!doctype html>
     <html lang="pt-BR" class="h-full">
@@ -71,7 +71,7 @@ module.exports = {
 
   detail: async (req, res) => {
     try {
-      const item = await Formulario.findById(req.params.id);
+      const item = await forms.getById(req.params.id);
       if (!item) return res.status(404).send('Formulário não encontrado');
       res.render('historico_detalhe', { item });
     } catch (err) {
@@ -94,7 +94,7 @@ module.exports = {
       ];
       const atualizacoes = {};
       campos.forEach(c => { if (req.body[c] !== undefined) atualizacoes[c] = req.body[c]; });
-      await Formulario.findByIdAndUpdate(req.params.id, atualizacoes, { new: true });
+      await forms.updateById(req.params.id, atualizacoes);
       res.redirect(`/historico/${req.params.id}`);
     } catch (err) {
       console.error(err);
@@ -106,7 +106,7 @@ module.exports = {
     try {
       let dataVisita = new Date(req.body.data_horario_visita);
       if (isNaN(dataVisita)) {
-        const orig = await Formulario.findById(req.params.id, 'data_horario_visita');
+        const orig = await forms.getById(req.params.id);
         dataVisita = orig.data_horario_visita;
       }
       const atualizacao = {
@@ -120,7 +120,7 @@ module.exports = {
         observacoes: req.body.observacoes,
         data_horario_visita: dataVisita,
       };
-      await Formulario.findByIdAndUpdate(req.params.id, atualizacao);
+      await forms.updateById(req.params.id, atualizacao);
       res.redirect('/historico');
     } catch (err) {
       console.error('Erro ao atualizar formulário:', err);
@@ -130,7 +130,7 @@ module.exports = {
 
   apiHistorico: async (req, res) => {
     try {
-      const registros = await Formulario.find().sort({ data_horario_visita: -1 });
+      const registros = await forms.findSortedByDateDesc();
       res.json(registros);
     } catch (err) {
       console.error('Erro ao buscar histórico:', err);

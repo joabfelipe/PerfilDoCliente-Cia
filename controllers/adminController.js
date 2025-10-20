@@ -1,8 +1,12 @@
-const User = require('../models/userModel');
+const { users } = require('../db');
+const path = require('path');
 
 module.exports = {
   index: async (req, res) => {
-    const users = await User.find();
+    if (req.query.view === 'docs') {
+      return res.sendFile(path.join(__dirname, '..', 'public', 'assets', 'admin-docs.html'));
+    }
+    const lista = await users.find();
     let html = `
     <!doctype html>
 <html lang="pt-BR" class="h-full">
@@ -37,6 +41,9 @@ module.exports = {
     </a>
     <a href="/index" class="inline-flex items-center gap-2 border border-red-200 bg-white text-red-700 px-3 py-2 rounded-xl text-sm font-medium hover:bg-red-50 transition">
       <i data-lucide="home" class="h-4 w-4"></i> Tela Inicial
+    </a>
+    <a href="/admin?view=docs" class="inline-flex items-center gap-2 border border-red-200 bg-white text-red-700 px-3 py-2 rounded-xl text-sm font-medium hover:bg-red-50 transition">
+      <i data-lucide="book-open-text" class="h-4 w-4"></i> Documentação & FAQ
     </a>
   </nav>
 
@@ -99,7 +106,7 @@ module.exports = {
 </body>
 </html>`;
 
-    const userRows = users.map(u => `
+    const userRows = lista.map(u => `
       <tr>
         <td>${u.email}</td>
         <td>${u.perfil}</td>
@@ -119,8 +126,7 @@ module.exports = {
   create: async (req, res) => {
     try {
       const { email, senha, perfil } = req.body;
-      const novo = new User({ email, senha, perfil });
-      await novo.save();
+      await users.create({ email, senha, perfil });
       res.redirect('/admin');
     } catch (err) {
       console.error('Erro ao salvar usuário:', err);
@@ -131,7 +137,7 @@ module.exports = {
   remove: async (req, res) => {
     try {
       const { id } = req.body;
-      await User.findByIdAndDelete(id);
+      await users.deleteById(id);
       res.redirect('/admin');
     } catch (err) {
       console.error('Erro ao deletar usuário:', err);

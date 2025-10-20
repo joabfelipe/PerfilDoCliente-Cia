@@ -1,5 +1,5 @@
 const path = require('path');
-const User = require('../models/userModel');
+const { users } = require('../db');
 
 module.exports = {
   getLogin: (req, res) => {
@@ -9,7 +9,7 @@ module.exports = {
   postLogin: async (req, res) => {
     try {
       const { email, senha } = req.body;
-      const user = await User.findOne({ email });
+      const user = await users.findOneByEmail(email);
 
       if (!user) return res.status(401).send('Credenciais inválidas');
 
